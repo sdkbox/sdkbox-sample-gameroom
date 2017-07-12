@@ -3,13 +3,13 @@
 
 class GameListener : public sdkbox::GameroomListener {
 public:
-	GameListener() = default;
-	~GameListener() = default;
+    GameListener() = default;
+    ~GameListener() = default;
 
 public:
-	virtual void onLoginAccessTokenMsg(fbgAccessTokenHandle);
-	virtual void onFeedShareMsg(fbgFeedShareHandle);
-	virtual void onPurchaseIAPMsg(fbgPurchaseHandle);
-	virtual void onPurchaseTrialware(fbgHasLicenseHandle);
+    virtual void onLoginAccessTokenMsg(fbgAccessTokenHandle);
+    virtual void onFeedShareMsg(fbgFeedShareHandle);
+    virtual void onPurchaseIAPMsg(fbgPurchaseHandle);
+    virtual void onPurchaseTrialware(fbgHasLicenseHandle);
 
 };

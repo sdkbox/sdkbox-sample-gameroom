@@ -8,61 +8,61 @@
 #include <process.h>
 
 namespace sdkbox {
-	enum {
-		SUCCESS = 0,
-		FAILURE = 1,
-		THREAD_SUSPEND_INTERVAL = 20
-	};
+    enum {
+        SUCCESS = 0,
+        FAILURE = 1,
+        THREAD_SUSPEND_INTERVAL = 20
+    };
 
-	class  GameroomListener {
-	public:
-		GameroomListener() = default;
-		virtual ~GameroomListener() {}
+    class  GameroomListener {
+    public:
+        GameroomListener() = default;
+        virtual ~GameroomListener() {}
 
-		GameroomListener(const GameroomListener&) = delete;
-		GameroomListener(GameroomListener&&) = delete;
+        GameroomListener(const GameroomListener&) = delete;
+        GameroomListener(GameroomListener&&) = delete;
 
-		GameroomListener& operator=(GameroomListener&&) = delete;
-		GameroomListener& operator=(const GameroomListener&) = delete;
+        GameroomListener& operator=(GameroomListener&&) = delete;
+        GameroomListener& operator=(const GameroomListener&) = delete;
 
-	public:
-		virtual void onLoginAccessTokenMsg(fbgAccessTokenHandle) = 0;
-		virtual void onFeedShareMsg(fbgFeedShareHandle) = 0;
-		virtual void onPurchaseIAPMsg(fbgPurchaseHandle) = 0;
-		virtual void onPurchaseTrialware(fbgHasLicenseHandle) = 0;
-	};
+    public:
+        virtual void onLoginAccessTokenMsg(fbgAccessTokenHandle) = 0;
+        virtual void onFeedShareMsg(fbgFeedShareHandle) = 0;
+        virtual void onPurchaseIAPMsg(fbgPurchaseHandle) = 0;
+        virtual void onPurchaseTrialware(fbgHasLicenseHandle) = 0;
+    };
 
-	class PluginGameroom {
-	public:
-		PluginGameroom() = default;
-		~PluginGameroom() = default;
+    class PluginGameroom {
+    public:
+        PluginGameroom() = default;
+        ~PluginGameroom() = default;
 
-		PluginGameroom(const PluginGameroom&) = delete;
-		PluginGameroom(PluginGameroom&&) = delete;
-		
-		PluginGameroom& operator=(const PluginGameroom&) = delete;
-		PluginGameroom& operator=(PluginGameroom&&) = delete;
+        PluginGameroom(const PluginGameroom&) = delete;
+        PluginGameroom(PluginGameroom&&) = delete;
 
-	public:
-		static int init(const char* appID);
+        PluginGameroom& operator=(const PluginGameroom&) = delete;
+        PluginGameroom& operator=(PluginGameroom&&) = delete;
 
-		static int destroy();
+    public:
+        static int init(const char* appID);
 
-		static void setListener(GameroomListener* listener);
-		static GameroomListener* listener() { return listener_; }
+        static int destroy();
 
-		static void log(const char* msg);
+        static void setListener(GameroomListener* listener);
+        static GameroomListener* listener() { return listener_; }
 
-	private:
-		static int createPluginThread();
+        static void log(const char* msg);
 
-		static DWORD WINAPI pluginThreadFunc(LPVOID arg);
+    private:
+        static int createPluginThread();
 
-	private:
-		static HANDLE thHandle_;
-		static bool isRunning_;
-		static GameroomListener* listener_;
-	};
+        static DWORD WINAPI pluginThreadFunc(LPVOID arg);
+
+    private:
+        static HANDLE thHandle_;
+        static bool isRunning_;
+        static GameroomListener* listener_;
+    };
 
 
 }

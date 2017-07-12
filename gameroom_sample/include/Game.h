@@ -8,24 +8,24 @@
 class Game
 {
 public:
-  Game() {};
-  ~Game() {};
+    Game() {};
+    ~Game() {};
 
-  int init(const char* appID);
-  void gameLoop();
+    int init(const char* appID);
+    void gameLoop();
 
 private:
-  bool exitGame = false;
-  char commandBuffer[BUFFER_SIZE];
-  int commandIndex = 0;
+    bool exitGame = false;
+    char commandBuffer[BUFFER_SIZE];
+    int commandIndex = 0;
 
-  void loginWithScopes();
+    void loginWithScopes();
 
-  void checkKeyboard();
-  void processCommand();
-  void pumpFBGMessages();
+    void checkKeyboard();
+    void processCommand();
+    void pumpFBGMessages();
 
-  void outputCommands();
+    void outputCommands();
 };
 
 #endif
