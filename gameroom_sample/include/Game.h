@@ -23,7 +23,6 @@ private:
 
     void checkKeyboard();
     void processCommand();
-    void pumpFBGMessages();
 
     void outputCommands();
 };
