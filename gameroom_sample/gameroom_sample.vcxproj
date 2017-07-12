@@ -85,8 +85,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Work\win32\gameroom_sample\gameroom_sample\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Work\win32\gameroom_sample\gameroom_sample\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\gameroom_sample\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\gameroom_sample\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
