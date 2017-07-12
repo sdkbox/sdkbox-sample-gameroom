@@ -49,6 +49,7 @@ namespace sdkbox {
 		static int destroy();
 
 		static void setListener(GameroomListener* listener);
+		static GameroomListener* listener() { return listener_; }
 
 		static void log(const char* msg);
 

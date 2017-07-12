@@ -32,7 +32,11 @@ void Game::gameLoop()
     checkKeyboard();
     // pumpFBGMessages();
   }
+ 
+  auto l = sdkbox::PluginGameroom::listener();
   sdkbox::PluginGameroom::destroy();
+
+  delete l;
 }
 
 void Game::checkKeyboard()
