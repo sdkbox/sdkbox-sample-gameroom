@@ -91,7 +91,7 @@ void Game::processCommand()
             loginWithScopes();
             break;
         case 'f':
-            fbg_FeedShare(
+            sdkbox::PluginGameroom::feedShare(
                 nullptr,
                 "https://www.facebook.com",
                 "Testing Link Name",
@@ -102,7 +102,7 @@ void Game::processCommand()
             );
             break;
         case 'p':
-            fbg_PurchaseIAP(
+            sdkbox::PluginGameroom::purchaseIAP(
                 param1,
                 1,
                 1,
@@ -113,7 +113,7 @@ void Game::processCommand()
             );
             break;
         case 'u':
-            fbg_PurchaseIAPWithProductURL(
+            sdkbox::PluginGameroom::purchaseIAPWithProductURL(
                 "https://friendsmash-unity.herokuapp.com/payments/100coins.php",
                 1,
                 1,
@@ -123,10 +123,10 @@ void Game::processCommand()
                 nullptr
             );
         case 'v':
-            fbg_PayPremium();
+            sdkbox::PluginGameroom::payPremium();
             break;
         case 'b':
-            fbg_HasLicense();
+            sdkbox::PluginGameroom::hasLicense();
             break;
         case 'a':
             fbg_AppRequest(
@@ -147,7 +147,7 @@ void Game::processCommand()
         case 'w':
             ::printf(
                 "Is Logged In: %d\n",
-                fbg_IsLoggedIn()
+                sdkbox::PluginGameroom::isLoggedIn()
             );
             break;
         case 'e': {
@@ -181,8 +181,8 @@ void Game::processCommand()
 
 void Game::loginWithScopes() {
 
-    fbgLoginScope loginScopes[2] = { fbgLoginScope::user_friends, fbgLoginScope::email };
-    fbg_Login_WithScopes(
+    sdkbox::LoginScope loginScopes[2] = { sdkbox::LoginScope::user_friends, sdkbox::LoginScope::email };
+    sdkbox::PluginGameroom::loginWithScopes(
         2,
         loginScopes
     );
