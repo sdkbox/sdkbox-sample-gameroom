@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Listener.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Game.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Listener.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PluginGameroom.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PluginGameroomTypes.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{ad1beb4e-e285-4918-9b91-ea46b9fdd791}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{592149f6-cecc-4f0f-97d1-7f777b3e00f7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
