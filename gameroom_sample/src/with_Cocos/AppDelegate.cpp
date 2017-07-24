@@ -8,11 +8,12 @@
 USING_NS_CC;
 
 AppDelegate::AppDelegate() {
-
+	freopen("fbg.log", "w", stdout);
 }
 
 AppDelegate::~AppDelegate()
 {
+	fclose(stdout);
 }
 
 //if you want a different context,just modify the value of glContextAttrs
@@ -33,9 +34,25 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
-    if(!glview) {
-        glview = GLViewImpl::createWithRect("facebook", Rect(0, 0, 640, 480));
+	if (!glview) {
+		const wchar_t title[]{ L"Facebook Gameroom" };
+		auto parentWin = FindWindow(NULL, title);
+
+		::CCLOG("parent HWND: %x", parentWin);
+		
+
+		//SetParent(currentWin, parentWin);
+		SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+		RECT rect; 
+		GetWindowRect(parentWin, &rect);
+		::CCLOG("Parent Rect Size: %d, %d, %d, %d", rect.top, rect.left, rect.right, rect.bottom);
+		::CCLOG("parent window size: %d, %d", rect.right - rect.left, rect.bottom - rect.top);
+        glview = GLViewImpl::createWithRect("facebook", Rect(0, 0, rect.right-rect.left-20, rect.bottom-rect.top-100));
         director->setOpenGLView(glview);
+		auto currentWin = Director::getInstance()->getOpenGLView()->getWin32Window();
+		::CCLOG("current HWND: %x", currentWin);
+		SetParent(currentWin, parentWin);
+		ShowWindow(currentWin, SW_MAXIMIZE);
     }
 
     auto framesize = director->getOpenGLView()->getFrameSize();
