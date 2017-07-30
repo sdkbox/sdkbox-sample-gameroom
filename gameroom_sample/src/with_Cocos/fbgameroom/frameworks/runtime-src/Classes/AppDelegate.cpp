@@ -58,10 +58,20 @@ using namespace cocos2d::experimental;
 using namespace CocosDenshion;
 #endif
 
+//#include "HelloWorldScene.h"
+
+#include <Windows.h>
+#include <Winuser.h>
+#ifdef SDKBOX_ENABLED
+#include "PluginGameroom.h"
+#endif
+
+
 USING_NS_CC;
 
 AppDelegate::AppDelegate()
 {
+	freopen("fbg.log", "w", stdout);
 }
 
 AppDelegate::~AppDelegate()
@@ -72,6 +82,8 @@ AppDelegate::~AppDelegate()
     SimpleAudioEngine::end();
 #endif
     ScriptEngineManager::destroyInstance();
+
+	fclose(stdout);
 }
 
 void AppDelegate::initGLContextAttrs()
@@ -83,6 +95,10 @@ void AppDelegate::initGLContextAttrs()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
+#ifdef SDKBOX_ENABLED
+	sdkbox::PluginGameroom::init("523164037733626");
+#endif
+
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
@@ -93,7 +109,25 @@ bool AppDelegate::applicationDidFinishLaunching()
         glview = cocos2d::GLViewImpl::createWithRect("fbgameroom", Rect(0,0,960,640));
 #endif
         director->setOpenGLView(glview);
-}
+
+		//
+		const wchar_t title[]{ L"Facebook Gameroom" };
+		auto parentWin = FindWindow(NULL, title);
+
+		::CCLOG("parent HWND: %x", parentWin);
+
+		//
+		//SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+		RECT rect;
+		GetWindowRect(parentWin, &rect);
+		::CCLOG("Parent Rect Size: %d, %d, %d, %d", rect.top, rect.left, rect.right, rect.bottom);
+		::CCLOG("parent window size: %d, %d", rect.right - rect.left, rect.bottom - rect.top);
+
+		auto currentWin = Director::getInstance()->getOpenGLView()->getWin32Window();
+		::CCLOG("current HWND: %x", currentWin);
+		SetParent(currentWin, parentWin);
+		ShowWindow(currentWin, SW_MAXIMIZE);
+	}
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
@@ -166,6 +200,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->addRegisterCallback(register_all_cocos2dx_audioengine);
 #endif
 
+#if 0
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     sc->addRegisterCallback(JavascriptJavaBridge::_js_register);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
@@ -179,6 +214,13 @@ bool AppDelegate::applicationDidFinishLaunching()
     ScriptEngineProtocol *engine = ScriptingCore::getInstance();
     ScriptEngineManager::getInstance()->setScriptEngine(engine);
     ScriptingCore::getInstance()->runScript("main.js");
+
+#else
+	//auto scene = HelloWorld::createScene();
+
+	// run
+	//director->runWithScene(scene);
+#endif
 
     return true;
 }
