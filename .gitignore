@@ -273,9 +273,6 @@ __pycache__/
 
 # Cake - Uncomment if you are using it
 # tools/
-gameroom_sample/src/with_Cocos/fbgameroom/frameworks/cocos2d-x/cocos/2d/Debug.win32/
-gameroom_sample/src/with_Cocos/fbgameroom/frameworks/runtime-src/proj.win32/Debug.win32/
-gameroom_sample/src/with_Cocos/fbgameroom/frameworks/cocos2d-x/external/recast/proj.win32/Debug.win32/
-gameroom_sample/src/with_Cocos/fbgameroom/frameworks/cocos2d-x/external/Box2D/proj.win32/Debug.win32/
-gameroom_sample/src/with_Cocos/fbgameroom/frameworks/cocos2d-x/cocos/scripting/js-bindings/proj.win32/Debug.win32/
-gameroom_sample/src/with_Cocos/fbgameroom/frameworks/cocos2d-x/cocos/editor-support/spine/proj.win32/Debug.win32/
+Debug.win32/
+cocos2d/
+cocos2d-x/
