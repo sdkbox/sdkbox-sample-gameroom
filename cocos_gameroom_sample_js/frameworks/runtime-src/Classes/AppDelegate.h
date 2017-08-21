@@ -10,8 +10,7 @@
 #define  _APP_DELEGATE_H_
 
 #include "platform/CCApplication.h"
-//#include "PluginGameroomJS.hpp"
-//#include "PluginGameroomJSHelper.h"
+
 /**
  @brief    The cocos2d Application.
  

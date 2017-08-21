@@ -27,4 +27,16 @@ OVRP_PUBLIC_FUNCTION(size_t) fbg_AppRequest_GetTo(
   size_t bufferIn
 );
 
+// Usable only if fbg_AppRequestWithPreSendCallback was called.
+// This will cause the app request to actually be sent.
+OVRP_PUBLIC_FUNCTION(fbgRequest) fbg_AppRequest_Send(
+	const fbgAppRequestHandle obj
+);
+
+// Returns true if the App Request was sent with fbg_AppRequestWithPreSendCallback()
+// and fbg_AppRequest_Send has not already been called on this App Request
+OVRP_PUBLIC_FUNCTION(bool) fbg_AppRequest_HasBeenSent(
+	const fbgAppRequestHandle obj
+);
+
 #endif

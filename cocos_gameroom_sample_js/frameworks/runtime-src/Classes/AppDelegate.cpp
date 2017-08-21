@@ -58,6 +58,10 @@ using namespace cocos2d::experimental;
 using namespace CocosDenshion;
 #endif
 
+#include "PluginGameroomJS.hpp"
+#include "PluginGameroomJSHelper.h"
+
+
 USING_NS_CC;
 
 AppDelegate::AppDelegate()
@@ -73,7 +77,7 @@ AppDelegate::~AppDelegate()
     SimpleAudioEngine::end();
 #endif
 	fclose(stdout);
-    //ScriptEngineManager::destroyInstance();
+    ScriptEngineManager::destroyInstance();
 }
 
 void AppDelegate::initGLContextAttrs()
@@ -95,21 +99,32 @@ bool AppDelegate::applicationDidFinishLaunching()
 		const wchar_t title[]{ L"Facebook Gameroom" };
 		auto parentWin = FindWindow(NULL, title);
 		::CCLOG("parent HWND: %x", parentWin);
-		SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+
+		// set dpi for app.
+		auto res_dpi = SetProcessDPIAware();
+		::CCLOG("set dpi result: %u", res_dpi);
+
 		RECT rect;
 		GetWindowRect(parentWin, &rect);
 		::CCLOG("Parent Rect Size: %d, %d, %d, %d", rect.top, rect.left, rect.right, rect.bottom);
 		::CCLOG("parent window size: %d, %d", rect.right - rect.left, rect.bottom - rect.top);
 		glview = GLViewImpl::createWithRect("cocos_gameroom_sample_js", Rect(0, 0, rect.right - rect.left - 20, rect.bottom - rect.top - 100));
-		director->setOpenGLView(glview);
-		auto currentWin = Director::getInstance()->getOpenGLView()->getWin32Window();
-		::CCLOG("current HWND: %x", currentWin);
-		SetParent(currentWin, parentWin);
+
+		// Maybe SDKBOX js-binding has some pointers that are not released, 
+		// so the assertion "_CrtIsValidHeapPointer" will be failed when current window is closed as child window.
+		// https://docs.microsoft.com/zh-cn/cpp/c-runtime-library/reference/crtisvalidheappointer
+		//
+		// If you comment the register codes of SDKBOX plugin js-binding, everything will be ok.
+		// 
+		// A WORKAROUND is that don't use "SetParent" to build the affiliation with "Facebook Gameroom Client" window.
+		//
+		//director->setOpenGLView(glview);
+		//auto currentWin = Director::getInstance()->getOpenGLView()->getWin32Window();
+		//::CCLOG("current HWND: %x", currentWin);
+		//SetParent(currentWin, parentWin);
 
 #endif
-
-
-        //director->setOpenGLView(glview);
+        director->setOpenGLView(glview);
 }
 
     // set FPS. the default value is 1.0/60 if you don't call this
@@ -162,8 +177,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->addRegisterCallback(register_all_cocos2dx_3d_extension);
 
 	// register SDKBOX Plugin
-	//sc->addRegisterCallback(register_all_PluginGameroomJS);
-	//sc->addRegisterCallback(register_all_PluginGameroomJS_helper);
+	sc->addRegisterCallback(register_all_PluginGameroomJS);
+	sc->addRegisterCallback(register_all_PluginGameroomJS_helper);
 
 #if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
     // Physics 3d can be commented out to reduce the package

@@ -73,11 +73,13 @@ cc.game.onStart = function(){
     // Uncomment the following line to set a fixed orientation for your game
     //cc.view.setOrientation(cc.ORIENTATION_PORTRAIT);
 
-    // Setup the resolution policy and design resolution size
-    cc.view.setDesignResolutionSize(1024, 768, cc.ResolutionPolicy.SHOW_ALL);
+	// Setup the resolution policy and design resolution size
+	//
+	// WORKAROUND: In Facebook Gameroom, this setting can't be reconciled with window scaling.
+    //cc.view.setDesignResolutionSize(1024, 768, cc.ResolutionPolicy.SHOW_ALL);
 
     // The game will be resized when browser size change
-    cc.view.resizeWithBrowserSize(false);
+    cc.view.resizeWithBrowserSize(true);
 
     //load resources
     cc.LoaderScene.preload(g_resources, function () {

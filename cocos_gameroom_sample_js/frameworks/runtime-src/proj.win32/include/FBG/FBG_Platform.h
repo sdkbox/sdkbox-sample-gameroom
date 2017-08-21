@@ -23,6 +23,8 @@
 #include "FBG_Requests_Purchase.h"
 #include "FBG_Requests_AppEvent.h"
 #include "FBG_Requests_OVRAccessToken.h"
+#include "FBG_ErrorResponse.h"
+#include "FBG_AppRequestRecipient.h"
 
 OVRP_PUBLIC_FUNCTION(bool) fbg_IsPlatformInitialized();
 
@@ -46,7 +48,7 @@ OVRPL_PUBLIC_FUNCTION(fbgPlatformInitializeResult) fbg_PlatformInitializeWindows
 // key version information as defined in this header package. This is used to
 // ensure that the version in your headers matches the version of the static
 // library.
-#define fbg_PlatformInitializeWindows(appId) fbg_PlatformInitializeWindowsEx((appId), PLATFORM_PRODUCT_VERSION, PLATFORM_MAJOR_VERSION)
+#define fbg_PlatformInitializeWindows(appId) fbg_PlatformInitializeWindowsEx((appId), FBG_PLATFORM_PRODUCT_VERSION, FBG_PLATFORM_MAJOR_VERSION)
 
 #endif
 

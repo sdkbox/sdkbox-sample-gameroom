@@ -1,15 +1,16 @@
 
 var HelloWorldLayer = cc.Layer.extend({
-    sprite:null,
+	sprite: null,
+	app_id: '313416692430467',
+	test_app_id: '523164037733626',
     ctor:function () {
 		this._super();
 
-		sdkbox.PluginGameroom.log('Sample Startup')
-
 		this.createTestMenu();
+		cc.log('Sample Startup')
 
-		var quit = new cc.MenuItemLabel(new cc.LabelTTF('QUIT', 'sans', 16), function () {
-			sdkbox.PluginGameroom.log('QUIT');
+		var quit = new cc.MenuItemLabel(new cc.LabelTTF('QUIT', 'sans', 24), function () {
+			cc.log('QUIT');
 			sdkbox.PluginGameroom.destroy();
 		});
 		var menu = new cc.Menu(quit);
@@ -32,13 +33,13 @@ var HelloWorldLayer = cc.Layer.extend({
 
 		var self = this;
 		var winsize = cc.winSize;
-		var coinsLabel = cc.Label.createWithSystemFont('Hello Js', 'Arial', 16);
+		var coinsLabel = cc.Label.createWithSystemFont('Hello Js', 'Arial', 24);
 		coinsLabel.setColor(cc.color(255, 0, 0, 128));
 		coinsLabel.setPosition(winsize.width / 2, 80);
 		self.addChild(coinsLabel);
 		self.coinsLabel = coinsLabel;
 		var showText = function (msg) {
-			sdkbox.PluginGameroom.log(msg);
+			cc.log(msg);
 			self.coinsLabel.setString(msg);
 		}
 		self.showText = showText;
@@ -53,12 +54,12 @@ var HelloWorldLayer = cc.Layer.extend({
 		logo.y = winsize.height - logoSize.height / 2;
 		this.addChild(logo);
 
-		sdkbox.PluginGameroom.init('523164037733626');
+		sdkbox.PluginGameroom.init(this.app_id);
 		sdkbox.PluginGameroom.setListener({
 			onLoginAccessTokenMsg: function (handle) {
-				sdkbox.PluginGameroom.log('============');
-				sdkbox.PluginGameroom.log('onLoginAccessTokenMsg');
-				sdkbox.PluginGameroom.log(JSON.stringify(handle, null, 2));
+				cc.log('============');
+				cc.log('onLoginAccessTokenMsg');
+				cc.log(JSON.stringify(handle, null, 2));
 				if (handle.isValidToken) {
 					self.showText('login successful');
 				}
@@ -67,47 +68,63 @@ var HelloWorldLayer = cc.Layer.extend({
 				}
 			},
 			onFeedShareMsg: function (handle) {
-				sdkbox.PluginGameroom.log('============');
-				sdkbox.PluginGameroom.log('onFeedShareMsg');
-				sdkbox.PluginGameroom.log('shared post id = ' + handle.postID);
+				cc.log('============');
+				cc.log('onFeedShareMsg');
+				self.showText('onFeedShareMsg');
+				cc.log('shared post id = ' + handle.postID);
 				
 			},
 			onPurchaseIAPMsg: function (handle) {
-				sdkbox.PluginGameroom.log('============');
-				sdkbox.PluginGameroom.log('onPurchaseIAPMsg');
-				sdkbox.PluginGameroom.log('payment ID = '+ handle.paymentID);
-				sdkbox.PluginGameroom.log('amount = ' + handle.amount);
-				sdkbox.PluginGameroom.log('curency = ' + handle.currency);
-				sdkbox.PluginGameroom.log('purchase time = ' + handle.purchaseTime);
-				sdkbox.PluginGameroom.log('product ID = ' + handle.productID);
-				sdkbox.PluginGameroom.log('purchase token = ' + handle.purchaseToken);
-				sdkbox.PluginGameroom.log('quantity = ' + handle.quantity);
-				sdkbox.PluginGameroom.log('request id = ' + handle.requestID);
-				sdkbox.PluginGameroom.log('status = ' + handle.status);
-				sdkbox.PluginGameroom.log('signed req = ' + handle.signedReq);
-				sdkbox.PluginGameroom.log('error code = ' + handle.errorCode);
-				sdkbox.PluginGameroom.log('error msg = ' + handle.errorMsg);
+				cc.log('============');
+				cc.log('onPurchaseIAPMsg');
+				self.showText('onPurchaseIAPMsg');
+				cc.log('payment ID = '+ handle.paymentID);
+				cc.log('amount = ' + handle.amount);
+				cc.log('curency = ' + handle.currency);
+				cc.log('purchase time = ' + handle.purchaseTime);
+				cc.log('product ID = ' + handle.productID);
+				cc.log('purchase token = ' + handle.purchaseToken);
+				cc.log('quantity = ' + handle.quantity);
+				cc.log('request id = ' + handle.requestID);
+				cc.log('status = ' + handle.status);
+				cc.log('signed req = ' + handle.signedReq);
+				cc.log('error code = ' + handle.errorCode);
+				cc.log('error msg = ' + handle.errorMsg);
 				
 			}, 
-			onPurchaseTrialware: function (handle) {
-				sdkbox.PluginGameroom.log('============');
-				sdkbox.PluginGameroom.log('onPurchaseTrialware');
-				sdkbox.PluginGameroom.log('has license = ' + handle.hasLicense);
+			onHasLicenseMsg: function (handle) {
+				cc.log('============');
+				cc.log('onHasLicenseMsg');
+				self.showText('onHasLicenseMsg');
+				cc.log('has license = ' + handle.hasLicense);
+			},
+			onAppRequestMsg: function (handle) {
+				cc.log('============');
+				cc.log('onAppRequestMsg');
+				self.showText('onAppRequestMsg');
+				cc.log('objectID = ' + handle.objectiD);
+				cc.log('to user: ' + handle.toUser);
 			}
 		});
 
-		var btnLogin = new cc.MenuItemFont('Login', function () {
+		cc.MenuItemFont.setFontSize(24);
+		var btnLogin = new cc.MenuItemFont('Gameroom Login', function () {
 			sdkbox.PluginGameroom.login();
 		}, this);
 
-		var btnIsLoggedIn = new cc.MenuItemFont('Check Login', function () {
-			sdkbox.PluginGameroom.log('==============');
-			sdkbox.PluginGameroom.log('is login: ' + sdkbox.PluginGameroom.isLoggedIn());
+		var btnLoginWithScopes = new cc.MenuItemFont('Gameroom Login With Scopes', function () {
+			sdkbox.PluginGameroom.loginWithScopes(2, ['public_profile', 'email']);
 		}, this);
 
-		var btnFeedShare = new cc.MenuItemFont('Feed Share', function () {
-			sdkbox.PluginGameroom.log('==============');
-			sdkbox.PluginGameroom.log('feed share');
+
+		var btnIsLoggedIn = new cc.MenuItemFont('Gameroom Check Login', function () {
+			cc.log('==============');
+			cc.log('Gameroom Check login: ' + sdkbox.PluginGameroom.isLoggedIn());
+		}, this);
+
+		var btnFeedShare = new cc.MenuItemFont('Gameroom Feed Share', function () {
+			cc.log('==============');
+			cc.log('Gameroom Feed Share');
 			sdkbox.PluginGameroom.feedShare(
 				'',
 				'https://www.facebook.com',
@@ -120,10 +137,10 @@ var HelloWorldLayer = cc.Layer.extend({
 		}, this);
 
 		var btnIAP = new cc.MenuItemFont('Gameroom IAP', function () {
-			sdkbox.PluginGameroom.log('==============')
-			sdkbox.PluginGameroom.log('Gameroom IAP');
+			cc.log('==============')
+			cc.log('Gameroom IAP');
 			sdkbox.PluginGameroom.purchaseIAP(
-				'coins200',
+				'sdkbox_product_1',
 				1,
 				1,
 				1,
@@ -134,8 +151,8 @@ var HelloWorldLayer = cc.Layer.extend({
 		}, this);
 
 		var btnIAPWithURL = new cc.MenuItemFont('Gameroom IAP with URL', function () {
-			sdkbox.PluginGameroom.log('==============');
-			sdkbox.PluginGameroom.log('Gameroom IAP with URL');
+			cc.log('==============');
+			cc.log('Gameroom IAP with URL');
 			sdkbox.PluginGameroom.purchaseIAPWithProductURL(
 				'https://friendsmash-unity.herokuapp.com/payments/100coins.php',
 				1,
@@ -148,18 +165,37 @@ var HelloWorldLayer = cc.Layer.extend({
 		}, this);
 
 		var btnPurchaseLicense = new cc.MenuItemFont('Gameroom Purchase License or Premium', function () {
-			sdkbox.PluginGameroom.log('==============');
-			sdkbox.PluginGameroom.log('Gameroom Purchase License or Premium');
+			cc.log('==============');
+			cc.log('Gameroom Purchase License or Premium');
 			sdkbox.PluginGameroom.payPremium();
 		});
 
 		var btnCheckLicense = new cc.MenuItemFont('Gameroom Check License', function () {
-			sdkbox.PluginGameroom.log('==============');
-			sdkbox.PluginGameroom.log('Check License');
+			cc.log('==============');
+			cc.log('Gameroom Check License');
 			sdkbox.PluginGameroom.hasLicense();
 		});
 
-		var menu = new cc.Menu(btnLogin, btnIsLoggedIn, btnFeedShare, btnIAP, btnIAPWithURL, btnPurchaseLicense, btnCheckLicense);
+		var btnActivateApp = new cc.MenuItemFont('Gameroom Activate App', function () {
+			cc.log('==============');
+			cc.log('Gameroom Activate App');
+			sdkbox.PluginGameroom.activateApp();
+		});
+
+		var btnAppEvent = new cc.MenuItemFont('Gameroom Send App Event', function () {
+			cc.log('==============');
+			cc.log('Gameroom Send App Event');
+			sdkbox.PluginGameroom.logAppEvent('test_event_1', { 'key1': 'val1', 'key2': 'val2' });
+			sdkbox.PluginGameroom.logAppEventWithValueToSum('test_event_2', { 'key3': 'val3', 'key4': 'val4' }, 10.24);
+		});
+
+		var btnAppRequest = new cc.MenuItemFont('Gameroom Send App Request', function () {
+			cc.log('==============');
+			cc.log('Gameroom Send App Request');
+			sdkbox.PluginGameroom.appRequest('hello', '', '', '1506344439429504', '', '', '', '', '');
+		});
+
+		var menu = new cc.Menu(btnLogin, btnLoginWithScopes, btnIsLoggedIn, btnFeedShare, btnIAP, btnIAPWithURL, btnPurchaseLicense, btnCheckLicense, btnActivateApp, btnAppEvent, btnAppRequest);
 		menu.x = winsize.width / 2;
 		menu.y = winsize.height / 2;
 		menu.alignItemsVerticallyWithPadding(20);

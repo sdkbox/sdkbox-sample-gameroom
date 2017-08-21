@@ -482,7 +482,7 @@ namespace sdkbox {
 #elif defined(MOZJS_MAJOR_VERSION) && MOZJS_MAJOR_VERSION >= 26
         JS::Value val = ::std_vector_string_to_jsval(cx, arr);
         retVal.set(val);
-		return true;
+        return true;
 #else
         //support v2?
         JSObject *jsretArr = JS_NewArrayObject(cx, 0, NULL);

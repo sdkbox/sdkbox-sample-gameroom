@@ -34,7 +34,7 @@ namespace sdkbox {
         static int createPluginThread();
         static DWORD WINAPI pluginThreadFunc(LPVOID arg);
 
-		static size_t extractLoginScopes(const std::vector<std::string>& loginScopes, LoginScope* scopes);
+		static uint32_t extractLoginScopes(const std::vector<std::string>& loginScopes, LoginScope* scopes);
 
     private:
         static HANDLE thHandle_;

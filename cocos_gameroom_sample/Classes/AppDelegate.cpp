@@ -37,12 +37,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	if (!glview) {
 		const wchar_t title[]{ L"Facebook Gameroom" };
 		auto parentWin = FindWindow(NULL, title);
-
 		::CCLOG("parent HWND: %x", parentWin);
 		
+		// set dpi for app.
+		auto res_dpi = SetProcessDPIAware();
+		::CCLOG("set dpi result: %u", res_dpi);
 
-		//SetParent(currentWin, parentWin);
-		SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
 		RECT rect; 
 		GetWindowRect(parentWin, &rect);
 		::CCLOG("Parent Rect Size: %d, %d, %d, %d", rect.top, rect.left, rect.right, rect.bottom);
@@ -52,7 +52,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		auto currentWin = Director::getInstance()->getOpenGLView()->getWin32Window();
 		::CCLOG("current HWND: %x", currentWin);
 		SetParent(currentWin, parentWin);
-		//ShowWindow(currentWin, SW_MAXIMIZE);
     }
 
     auto framesize = director->getOpenGLView()->getFrameSize();

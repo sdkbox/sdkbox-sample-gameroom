@@ -270,6 +270,34 @@ JSBool js_PluginGameroomJS_PluginGameroom_payPremium(JSContext *cx, uint32_t arg
 }
 #endif
 #if defined(MOZJS_MAJOR_VERSION)
+bool js_PluginGameroomJS_PluginGameroom_activateApp(JSContext *cx, uint32_t argc, JS::Value *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    if (argc == 0) {
+        std::string ret = sdkbox::PluginGameroom::activateApp();
+        JS::RootedValue jsret(cx);
+        sdkbox::c_string_to_jsval(cx, ret.c_str(), &jsret, ret.size());
+        args.rval().set(jsret);
+        return true;
+    }
+    JS_ReportErrorUTF8(cx, "js_PluginGameroomJS_PluginGameroom_activateApp : wrong number of arguments");
+    return false;
+}
+#elif defined(JS_VERSION)
+JSBool js_PluginGameroomJS_PluginGameroom_activateApp(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    if (argc == 0) {
+        std::string ret = sdkbox::PluginGameroom::activateApp();
+        jsval jsret;
+        sdkbox::c_string_to_jsval(cx, ret.c_str(), &jsret, ret.size());
+        JS_SET_RVAL(cx, vp, jsret);
+        return JS_TRUE;
+    }
+    JS_ReportError(cx, "wrong number of arguments");
+    return JS_FALSE;
+}
+#endif
+#if defined(MOZJS_MAJOR_VERSION)
 bool js_PluginGameroomJS_PluginGameroom_init(JSContext *cx, uint32_t argc, JS::Value *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -429,6 +457,75 @@ JSBool js_PluginGameroomJS_PluginGameroom_purchaseIAP(JSContext *cx, uint32_t ar
 }
 #endif
 #if defined(MOZJS_MAJOR_VERSION)
+bool js_PluginGameroomJS_PluginGameroom_appRequest(JSContext *cx, uint32_t argc, JS::Value *vp)
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+    if (argc == 9) {
+        const char* arg0;
+        const char* arg1;
+        const char* arg2;
+        const char* arg3;
+        const char* arg4;
+        const char* arg5;
+        unsigned int arg6;
+        const char* arg7;
+        const char* arg8;
+        std::string arg0_tmp; ok &= jsval_to_std_string(cx, args.get(0), &arg0_tmp); arg0 = arg0_tmp.c_str();
+        std::string arg1_tmp; ok &= jsval_to_std_string(cx, args.get(1), &arg1_tmp); arg1 = arg1_tmp.c_str();
+        std::string arg2_tmp; ok &= jsval_to_std_string(cx, args.get(2), &arg2_tmp); arg2 = arg2_tmp.c_str();
+        std::string arg3_tmp; ok &= jsval_to_std_string(cx, args.get(3), &arg3_tmp); arg3 = arg3_tmp.c_str();
+        std::string arg4_tmp; ok &= jsval_to_std_string(cx, args.get(4), &arg4_tmp); arg4 = arg4_tmp.c_str();
+        std::string arg5_tmp; ok &= jsval_to_std_string(cx, args.get(5), &arg5_tmp); arg5 = arg5_tmp.c_str();
+        ok &= jsval_to_uint32(cx, args.get(6), &arg6);
+        std::string arg7_tmp; ok &= jsval_to_std_string(cx, args.get(7), &arg7_tmp); arg7 = arg7_tmp.c_str();
+        std::string arg8_tmp; ok &= jsval_to_std_string(cx, args.get(8), &arg8_tmp); arg8 = arg8_tmp.c_str();
+        JSB_PRECONDITION2(ok, cx, false, "js_PluginGameroomJS_PluginGameroom_appRequest : Error processing arguments");
+        std::string ret = sdkbox::PluginGameroom::appRequest(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+        JS::RootedValue jsret(cx);
+        sdkbox::c_string_to_jsval(cx, ret.c_str(), &jsret, ret.size());
+        args.rval().set(jsret);
+        return true;
+    }
+    JS_ReportErrorUTF8(cx, "js_PluginGameroomJS_PluginGameroom_appRequest : wrong number of arguments");
+    return false;
+}
+#elif defined(JS_VERSION)
+JSBool js_PluginGameroomJS_PluginGameroom_appRequest(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    jsval *argv = JS_ARGV(cx, vp);
+    JSBool ok = JS_TRUE;
+    if (argc == 9) {
+        const char* arg0;
+        const char* arg1;
+        const char* arg2;
+        const char* arg3;
+        const char* arg4;
+        const char* arg5;
+        unsigned int arg6;
+        const char* arg7;
+        const char* arg8;
+        std::string arg0_tmp; ok &= jsval_to_std_string(cx, argv[0], &arg0_tmp); arg0 = arg0_tmp.c_str();
+        std::string arg1_tmp; ok &= jsval_to_std_string(cx, argv[1], &arg1_tmp); arg1 = arg1_tmp.c_str();
+        std::string arg2_tmp; ok &= jsval_to_std_string(cx, argv[2], &arg2_tmp); arg2 = arg2_tmp.c_str();
+        std::string arg3_tmp; ok &= jsval_to_std_string(cx, argv[3], &arg3_tmp); arg3 = arg3_tmp.c_str();
+        std::string arg4_tmp; ok &= jsval_to_std_string(cx, argv[4], &arg4_tmp); arg4 = arg4_tmp.c_str();
+        std::string arg5_tmp; ok &= jsval_to_std_string(cx, argv[5], &arg5_tmp); arg5 = arg5_tmp.c_str();
+        ok &= jsval_to_uint32(cx, argv[6], &arg6);
+        std::string arg7_tmp; ok &= jsval_to_std_string(cx, argv[7], &arg7_tmp); arg7 = arg7_tmp.c_str();
+        std::string arg8_tmp; ok &= jsval_to_std_string(cx, argv[8], &arg8_tmp); arg8 = arg8_tmp.c_str();
+        JSB_PRECONDITION2(ok, cx, JS_FALSE, "Error processing arguments");
+        std::string ret = sdkbox::PluginGameroom::appRequest(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+        jsval jsret;
+        sdkbox::c_string_to_jsval(cx, ret.c_str(), &jsret, ret.size());
+        JS_SET_RVAL(cx, vp, jsret);
+        return JS_TRUE;
+    }
+    JS_ReportError(cx, "wrong number of arguments");
+    return JS_FALSE;
+}
+#endif
+#if defined(MOZJS_MAJOR_VERSION)
 bool js_PluginGameroomJS_PluginGameroom_isLoggedIn(JSContext *cx, uint32_t argc, JS::Value *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
@@ -554,9 +651,11 @@ void js_register_PluginGameroomJS_PluginGameroom(JSContext *cx, JS::HandleObject
         JS_FN("log", js_PluginGameroomJS_PluginGameroom_log, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("hasLicense", js_PluginGameroomJS_PluginGameroom_hasLicense, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("payPremium", js_PluginGameroomJS_PluginGameroom_payPremium, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("activateApp", js_PluginGameroomJS_PluginGameroom_activateApp, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_PluginGameroomJS_PluginGameroom_init, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("feedShare", js_PluginGameroomJS_PluginGameroom_feedShare, 7, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("purchaseIAP", js_PluginGameroomJS_PluginGameroom_purchaseIAP, 7, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("appRequest", js_PluginGameroomJS_PluginGameroom_appRequest, 9, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("isLoggedIn", js_PluginGameroomJS_PluginGameroom_isLoggedIn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("destroy", js_PluginGameroomJS_PluginGameroom_destroy, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("login", js_PluginGameroomJS_PluginGameroom_login, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
@@ -632,9 +731,11 @@ void js_register_PluginGameroomJS_PluginGameroom(JSContext *cx, JSObject *global
         JS_FN("log", js_PluginGameroomJS_PluginGameroom_log, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("hasLicense", js_PluginGameroomJS_PluginGameroom_hasLicense, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("payPremium", js_PluginGameroomJS_PluginGameroom_payPremium, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("activateApp", js_PluginGameroomJS_PluginGameroom_activateApp, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_PluginGameroomJS_PluginGameroom_init, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("feedShare", js_PluginGameroomJS_PluginGameroom_feedShare, 7, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("purchaseIAP", js_PluginGameroomJS_PluginGameroom_purchaseIAP, 7, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("appRequest", js_PluginGameroomJS_PluginGameroom_appRequest, 9, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("isLoggedIn", js_PluginGameroomJS_PluginGameroom_isLoggedIn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("destroy", js_PluginGameroomJS_PluginGameroom_destroy, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("login", js_PluginGameroomJS_PluginGameroom_login, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
@@ -693,9 +794,11 @@ void js_register_PluginGameroomJS_PluginGameroom(JSContext *cx, JSObject *global
         JS_FN("log", js_PluginGameroomJS_PluginGameroom_log, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("hasLicense", js_PluginGameroomJS_PluginGameroom_hasLicense, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("payPremium", js_PluginGameroomJS_PluginGameroom_payPremium, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("activateApp", js_PluginGameroomJS_PluginGameroom_activateApp, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("init", js_PluginGameroomJS_PluginGameroom_init, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("feedShare", js_PluginGameroomJS_PluginGameroom_feedShare, 7, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("purchaseIAP", js_PluginGameroomJS_PluginGameroom_purchaseIAP, 7, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("appRequest", js_PluginGameroomJS_PluginGameroom_appRequest, 9, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("isLoggedIn", js_PluginGameroomJS_PluginGameroom_isLoggedIn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("destroy", js_PluginGameroomJS_PluginGameroom_destroy, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("login", js_PluginGameroomJS_PluginGameroom_login, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),

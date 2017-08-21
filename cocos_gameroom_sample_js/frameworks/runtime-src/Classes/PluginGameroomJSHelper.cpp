@@ -4,6 +4,7 @@
 
 #include <map>
 #include <string>
+#include <cstring>
 
 using namespace sdkbox;
 
@@ -40,9 +41,9 @@ JSOBJECT* FBGAccessTokenHandleToJS(JSContext* cx, const fbgAccessTokenHandle& ha
 
     JSOBJECT *js_permissions = JS_NEW_ARRAY(cx, permission_size);
     for (size_t i = 0; i < permission_size; ++i) {
-		JSOBJECT* permission_obj = JS_NEW_OBJECT(cx);
-		addProperty(cx, permission_obj, std::to_string(i).c_str(), fbgLoginScope_ToString(permissions[i]));
-		JS_ARRAY_SET(cx, js_permissions, i, permission_obj);
+        JSOBJECT* permission_obj = JS_NEW_OBJECT(cx);
+        addProperty(cx, permission_obj, std::to_string(i).c_str(), fbgLoginScope_ToString(permissions[i]));
+        JS_ARRAY_SET(cx, js_permissions, i, permission_obj);
     }
     addProperty(cx, jsobj, "permissions", js_permissions);
 
@@ -127,16 +128,57 @@ JSOBJECT* FBGPurchaseHandleToJS(JSContext* cx, const fbgPurchaseHandle& handle)
     return jsobj;
 }
 
+JSOBJECT* FBGAppRequestHandleToJS(JSContext* cx, const fbgAppRequestHandle& handle)
+{
+    JS_INIT_CONTEXT_FOR_UPDATE(cx);
+
+    JSOBJECT* jsobj = JS_NEW_OBJECT(cx);
+
+    char req_obj_id[FBG_BUFFER_SIZE];
+    sdkbox::PluginGameroom::appRequestGetRequestObjectID(handle, req_obj_id, FBG_BUFFER_SIZE);
+    addProperty(cx, jsobj, "objectID", req_obj_id);
+
+    char to_user[FBG_BUFFER_SIZE];
+    sdkbox::PluginGameroom::appRequestGetTo(handle, to_user, FBG_BUFFER_SIZE);
+    addProperty(cx, jsobj, "toUser", to_user);
+
+    return jsobj;
+}
+
+void SetFormData(const FormDataHandle form_data_obj, const FormData& form_data)
+{
+    for (auto pair_value : form_data) {
+        auto key_len = pair_value.first.length()+1;
+        char *key = new char[key_len];
+        std::strncpy(key, pair_value.first.c_str(), key_len);
+
+        auto value_len = pair_value.second.length()+1;
+		char *value = new char[value_len];
+        std::strncpy(value, pair_value.second.c_str(), value_len);
+
+        PluginGameroom::formDataSet(
+                form_data_obj,
+                key,
+                key_len,
+                value,
+                value_len
+        );
+
+        delete [] key;
+        delete [] value;
+    }
+}
+
 class GameroomListenerJSHelper: public sdkbox::GameroomListener, public sdkbox::JSListenerBase
 {
 public:
 
-    GameroomListenerJSHelper():sdkbox::JSListenerBase() {
-    }
+    GameroomListenerJSHelper():sdkbox::JSListenerBase() {}
 
 public:
 
-    void onLoginAccessTokenMsg(AccessTokenHandle handle) {
+    void onLoginAccessTokenMsg(AccessTokenHandle handle)
+    {
         JS::Value js_args[1];
 
 #if MOZJS_MAJOR_VERSION < 52
@@ -147,7 +189,8 @@ public:
         invokeDelegate("onLoginAccessTokenMsg", js_args, 1);
     }
 
-    void onFeedShareMsg(FeedShareHandle handle) {
+    void onFeedShareMsg(FeedShareHandle handle)
+    {
         JS::Value js_args[1];
 
 #if MOZJS_MAJOR_VERSION < 52
@@ -158,7 +201,8 @@ public:
         invokeDelegate("onFeedShareMsg", js_args, 1);
     }
 
-    void onPurchaseIAPMsg(PurchaseHandle handle) {
+    void onPurchaseIAPMsg(PurchaseHandle handle)
+    {
         JS::Value js_args[1];
 
 #if MOZJS_MAJOR_VERSION < 52
@@ -169,7 +213,8 @@ public:
         invokeDelegate("onPurchaseIAPMsg", js_args, 1);
     }
 
-    void onPurchaseTrialware(HasLicenseHandle handle) {
+    void onHasLicenseMsg(HasLicenseHandle handle)
+    {
         JS::Value js_args[1];
 
 #if MOZJS_MAJOR_VERSION < 52
@@ -177,12 +222,25 @@ public:
 #endif
 
         js_args[0] = JS::ObjectValue(*FBGHasLicenseHandleToJS(s_cx, handle));
-        invokeDelegate("onPurchaseTrialware", js_args, 1);
+        invokeDelegate("onHasLicenseMsg", js_args, 1);
+    }
+
+    void onAppRequestMsg(AppRequestHandle handle)
+    {
+        JS::Value js_args[1];
+
+#if MOZJS_MAJOR_VERSION < 52
+        JSB_AUTOCOMPARTMENT_WITH_GLOBAL_OBJCET
+#endif
+
+        js_args[0] = JS::ObjectValue(*FBGAppRequestHandleToJS(s_cx, handle));
+        invokeDelegate("onAppRequestMsg", js_args, 1);
     }
 
 private:
 
-    void invokeDelegate(const std::string& fName, JS::Value dataVal[], int argc) {
+    void invokeDelegate(const std::string& fName, JS::Value dataVal[], int argc)
+    {
         if (!s_cx) {
             return;
         }
@@ -252,7 +310,7 @@ JSBool js_PluginGameroomJS_PluginGameroom_setListener(JSContext *cx, uint32_t ar
             ok = false;
         }
 
-        JSB_PRECONDITION2(ok, cx, false, "js_PluginGameroomJS_PluginGameroom_setIAPListener : Error processing arguments");
+        JSB_PRECONDITION2(ok, cx, false, "js_PluginGameroomJS_PluginGameroom_setListener : Error processing arguments");
         GameroomListenerJSHelper* listener = new GameroomListenerJSHelper();
         listener->setJSDelegate(cx, args.get(0));
         sdkbox::PluginGameroom::setListener(listener);
@@ -260,7 +318,79 @@ JSBool js_PluginGameroomJS_PluginGameroom_setListener(JSContext *cx, uint32_t ar
         args.rval().setUndefined();
         return true;
     }
-    JS_ReportErrorUTF8(cx, "js_PluginGameroomJS_PluginGameroom_setIAPListener : wrong number of arguments");
+    JS_ReportErrorUTF8(cx, "js_PluginGameroomJS_PluginGameroom_setListener : wrong number of arguments");
+    return false;
+}
+
+
+#if defined(MOZJS_MAJOR_VERSION)
+#if MOZJS_MAJOR_VERSION >= 33
+bool js_PluginGameroomJS_PluginGameroom_logAppEvent(JSContext *cx, uint32_t argc, JS::Value *vp)
+#else
+bool js_PluginGameroomJS_PluginGameroom_logAppEvent(JSContext *cx, uint32_t argc, jsval *vp)
+#endif
+#elif defined(JS_VERSION)
+JSBool js_PluginGameroomJS_PluginGameroom_logAppEvent(JSContext *cx, uint32_t argc, jsval *vp)
+#endif
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+
+    if (argc == 2) {
+        std::string event_name;
+        ok &= jsval_to_std_string(cx, args.get(0), &event_name);
+
+        FormData form_data;
+        ok &= sdkbox::jsval_to_std_map_string_string(cx, args.get(1), &form_data);
+
+        JSB_PRECONDITION2(ok, cx, false, "js_PluginGameroomJS_PluginGameroom_logAppEvent: Error processing arguments");
+
+        auto form_data_obj = PluginGameroom::formDataCreateNew();
+        SetFormData(form_data_obj, form_data);
+        PluginGameroom::logAppEvent(event_name.c_str(), form_data_obj);
+        PluginGameroom::formDataDispose(form_data_obj);
+
+        args.rval().setUndefined();
+        return true;
+    }
+    JS_ReportErrorUTF8(cx, "js_PluginGameroomJS_PluginGameroom_logAppEvent: wrong number of arguments");
+    return false;
+}
+
+#if defined(MOZJS_MAJOR_VERSION)
+#if MOZJS_MAJOR_VERSION >= 33
+bool js_PluginGameroomJS_PluginGameroom_logAppEventWithValueToSum(JSContext *cx, uint32_t argc, JS::Value *vp)
+#else
+bool js_PluginGameroomJS_PluginGameroom_logAppEventWithValueToSum(JSContext *cx, uint32_t argc, jsval *vp)
+#endif
+#elif defined(JS_VERSION)
+JSBool js_PluginGameroomJS_PluginGameroom_logAppEventWithValueToSum(JSContext *cx, uint32_t argc, jsval *vp)
+#endif
+{
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    bool ok = true;
+
+    if (argc == 3) {
+        std::string event_name;
+        ok &= jsval_to_std_string(cx, args.get(0), &event_name);
+
+        FormData form_data;
+        ok &= sdkbox::jsval_to_std_map_string_string(cx, args.get(1), &form_data);
+
+        double sum;
+        ok &= js_to_number(cx, args.get(2), &sum);
+
+        JSB_PRECONDITION2(ok, cx, false, "js_PluginGameroomJS_PluginGameroom_logAppEventWithValueToSum: Error processing arguments");
+
+        auto form_data_obj = PluginGameroom::formDataCreateNew();
+        SetFormData(form_data_obj, form_data);
+        PluginGameroom::logAppEventWithValueToSum(event_name.c_str(), form_data_obj, static_cast<float>(sum));
+        PluginGameroom::formDataDispose(form_data_obj);
+
+        args.rval().setUndefined();
+        return true;
+    }
+    JS_ReportErrorUTF8(cx, "js_PluginGameroomJS_PluginGameroom_logAppEvent: wrong number of arguments");
     return false;
 }
 
@@ -271,6 +401,8 @@ void register_all_PluginGameroomJS_helper(JSContext* cx, JS::HandleObject global
     sdkbox::getJsObjOrCreat(cx, global, "sdkbox.PluginGameroom", &pluginObj);
 
     JS_DefineFunction(cx, pluginObj, "setListener", js_PluginGameroomJS_PluginGameroom_setListener, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, pluginObj, "logAppEvent", js_PluginGameroomJS_PluginGameroom_logAppEvent, 2, JSPROP_READONLY | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, pluginObj, "logAppEventWithValueToSum", js_PluginGameroomJS_PluginGameroom_logAppEventWithValueToSum, 3, JSPROP_READONLY | JSPROP_PERMANENT);
 }
 #else
 void register_all_PluginGameroomJS_helper(JSContext* cx, JSObject* global) {
