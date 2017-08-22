@@ -192,7 +192,7 @@ var HelloWorldLayer = cc.Layer.extend({
 		var btnAppRequest = new cc.MenuItemFont('Gameroom Send App Request', function () {
 			cc.log('==============');
 			cc.log('Gameroom Send App Request');
-			sdkbox.PluginGameroom.appRequest('hello', '', '', '1506344439429504', '', '', '', '', '');
+			sdkbox.PluginGameroom.appRequest('hello', '', '', '1506344439429504', '', '', 1, '', '');
 		});
 
 		var menu = new cc.Menu(btnLogin, btnLoginWithScopes, btnIsLoggedIn, btnFeedShare, btnIAP, btnIAPWithURL, btnPurchaseLicense, btnCheckLicense, btnActivateApp, btnAppEvent, btnAppRequest);

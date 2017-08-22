@@ -2,6 +2,7 @@
 #define FBG_TYPES_H
 
 #include "FBG_LoginScopes.h"
+#include "FBG_OCSdkAccountType.h"
 
 #include "FBG_KeyValuePairType.h"
 
@@ -19,12 +20,12 @@ extern "C" {
   typedef uint64_t fbgRequest;
 
   // Represents an RequestID that can used as a default.
-  // We guarantee that no valid Request ID will equal invalidRequestID
-  const uint64_t invalidRequestID = 0;
+  // We guarantee that no valid Request ID will equal fbgInvalidRequestID
+  const uint64_t fbgInvalidRequestID = 0;
 
   // Represents an invalid MessageID that can used as a default.
-  // We guarantee that no valid Message ID will equal invalidMessageID
-  const uint64_t invalidMessageID = 0;
+  // We guarantee that no valid Message ID will equal fbgInvalidMessageID
+  const uint64_t fbgInvalidMessageID = 0;
 
 
   /// A unique identifier for some entity in the system (user, room, etc).

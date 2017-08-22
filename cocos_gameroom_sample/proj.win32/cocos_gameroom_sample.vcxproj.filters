@@ -13,6 +13,9 @@
     <Filter Include="src\fbg">
       <UniqueIdentifier>{ada2f85b-62f2-4fd5-bb94-ecfee7c63eb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="log">
+      <UniqueIdentifier>{18109ebc-0eed-4d3b-ab3d-f9a8c81a7fb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -121,5 +124,10 @@
     <ResourceCompile Include="game.rc">
       <Filter>resource</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Debug.win32\fbg.log">
+      <Filter>log</Filter>
+    </Text>
   </ItemGroup>
 </Project>

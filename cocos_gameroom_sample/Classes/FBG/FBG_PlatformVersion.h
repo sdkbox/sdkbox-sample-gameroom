@@ -8,23 +8,23 @@
 #endif
 
 // Master version numbers
-#define PLATFORM_PRODUCT_VERSION 0 // Product version doesn't participate in semantic versioning.
-#define PLATFORM_MAJOR_VERSION   0 // If you change these values then you need to also make sure to change LibFBGPlatform.props in parallel.
-#define PLATFORM_MINOR_VERSION   3
-#define PLATFORM_PATCH_VERSION   0
-#define PLATFORM_BUILD_NUMBER    0
-#define PLATFORM_DRIVER_VERSION  0
+#define FBG_PLATFORM_PRODUCT_VERSION 0 // Product version doesn't participate in semantic versioning.
+#define FBG_PLATFORM_MAJOR_VERSION   0 
+#define FBG_PLATFORM_MINOR_VERSION   3
+#define FBG_PLATFORM_PATCH_VERSION   0
+#define FBG_PLATFORM_BUILD_NUMBER    0
+#define FBG_PLATFORM_DRIVER_VERSION  0
 // "Major.Minor.Patch.Build"
-#if !defined(PLATFORM_VERSION_STRING)
-#define PLATFORM_VERSION_STRING FBG_STRINGIZE(PLATFORM_MAJOR_VERSION.PLATFORM_MINOR_VERSION.PLATFORM_PATCH_VERSION.PLATFORM_BUILD_NUMBER)
+#if !defined(FBG_PLATFORM_VERSION_STRING)
+#define FBG_PLATFORM_VERSION_STRING FBG_STRINGIZE(FBG_PLATFORM_MAJOR_VERSION.FBG_PLATFORM_MINOR_VERSION.FBG_PLATFORM_PATCH_VERSION.FBG_PLATFORM_BUILD_NUMBER)
 #endif
 
 // This appears in the user-visible file properties.  TeamCity builds will stamp PLATFORM_DESCRIPTION_STRING.
-#if !defined(PLATFORM_DESCRIPTION_STRING)
+#if !defined(FBG_PLATFORM_DESCRIPTION_STRING)
 #if defined(_DEBUG)
-#define PLATFORM_DESCRIPTION_STRING "dev build debug"
+#define FBG_PLATFORM_DESCRIPTION_STRING "dev build debug"
 #else
-#define PLATFORM_DESCRIPTION_STRING "dev build"
+#define FBG_PLATFORM_DESCRIPTION_STRING "dev build"
 #endif
 #endif
 

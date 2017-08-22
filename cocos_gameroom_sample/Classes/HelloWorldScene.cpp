@@ -97,7 +97,7 @@ void HelloWorld::createTestMenu() {
 	menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Gameroom IAP", "sans", 24), [](Ref*) {
 		CCLOG("Gameroom IAP");
 		sdkbox::PluginGameroom::purchaseIAP(
-			"coins200",
+			"sdkbox_product_2",
 			1,
 			1,
 			1,
@@ -130,11 +130,47 @@ void HelloWorld::createTestMenu() {
 		sdkbox::PluginGameroom::hasLicense();
 	}));
 
+	menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Gameroom Activate App ", "sans", 24), [](Ref*) {
+		CCLOG("Gameroom Activate App");
+		sdkbox::PluginGameroom::activateApp();
+		//fbg_ActivateApp();
+	}));
+
+	menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Gameroom Send App Event ", "sans", 24), [](Ref*) {
+		if (!sdkbox::PluginGameroom::isLoggedIn()) return;
+
+		CCLOG("Gameroom Send App Event");
+		auto formData = sdkbox::PluginGameroom::formDataCreateNew();
+		char key[sdkbox::FBG_BUFFER_SIZE]{"sdkbox_key"};
+		char value[sdkbox::FBG_BUFFER_SIZE]{"3.1415"};
+		sdkbox::PluginGameroom::formDataSet(formData, key, sdkbox::FBG_BUFFER_SIZE, value, sdkbox::FBG_BUFFER_SIZE);
+		sdkbox::PluginGameroom::logAppEvent("test_event", formData);
+		
+		::CCLOG("Gameroom Send App Event with sum value");
+		sdkbox::PluginGameroom::logAppEventWithValueToSum("test_event", formData, 1024.2);
+		sdkbox::PluginGameroom::formDataDispose(formData);
+	}));
+
+	menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Gameroom Send App Request ", "sans", 24), [](Ref*) {
+		CCLOG("Gameroom Send App Request");
+		sdkbox::PluginGameroom::appRequest(
+			"hello world",
+			nullptr,
+			nullptr,
+			"1506344439429504",
+			nullptr,
+			nullptr,
+			1,
+			nullptr,
+			"hello"
+		);
+	}));
+
 	menu->alignItemsVerticallyWithPadding(10);
 	addChild(menu);
 }
 
-void HelloWorld::onLoginAccessTokenMsg(fbgAccessTokenHandle accessTokenHandle) {
+void HelloWorld::onLoginAccessTokenMsg(sdkbox::AccessTokenHandle accessTokenHandle) {
 	auto isValid = sdkbox::PluginGameroom::accessTokenIsValid(accessTokenHandle);
 	if (!isValid) {
 		// user not logged in
@@ -150,7 +186,7 @@ void HelloWorld::onLoginAccessTokenMsg(fbgAccessTokenHandle accessTokenHandle) {
 	auto permission_size = sdkbox::PluginGameroom::accessTokenGetPermissions(accessTokenHandle, permissions, 512);
 
 	::CCLOG(
-		"User ID: %lld\nAccess Token: %s\nExpiration Timestamp: %lld, Permission Count: %zu\nPermissions: ",
+		"OnLoginAccessTokenMsg, User ID: %lld\nAccess Token: %s\nExpiration Timestamp: %lld, Permission Count: %zu\nPermissions: ",
 		(long long)userid,
 		token_string,
 		(long long)expiration_timestamp,
@@ -163,15 +199,15 @@ void HelloWorld::onLoginAccessTokenMsg(fbgAccessTokenHandle accessTokenHandle) {
 	::CCLOG("\n");
 }
 
-void HelloWorld::onFeedShareMsg(fbgFeedShareHandle feedShareHandle) {
+void HelloWorld::onFeedShareMsg(sdkbox::FeedShareHandle feedShareHandle) {
 	auto postId = sdkbox::PluginGameroom::feedShareGetPostID(feedShareHandle);
 	::CCLOG(
-		"Feed Share Post ID: %ld\n",
+		"onFeedShareMsg, Feed Share Post ID: %ld\n",
 		(long)postId
 	);
 }
 
-void HelloWorld::onPurchaseIAPMsg(fbgPurchaseHandle payHandle) {
+void HelloWorld::onPurchaseIAPMsg(sdkbox::PurchaseHandle payHandle) {
 	size_t size;
 	char paymentId[512];
 	size = sdkbox::PluginGameroom::purchaseGetPaymentID(payHandle, paymentId, 512);
@@ -206,7 +242,7 @@ void HelloWorld::onPurchaseIAPMsg(fbgPurchaseHandle payHandle) {
 	size = sdkbox::PluginGameroom::purchaseGetErrorMessage(payHandle, errorMessage, 512);
 
 	::CCLOG(
-		"Purchase Handle: %s\nAmount: %d\nCurrency: %s\nPurchase Time: %lld\n"
+		"onPurchaseIAPMsg, Purchase Handle: %s\nAmount: %d\nCurrency: %s\nPurchase Time: %lld\n"
 		"Product Id:%s\nPurchase Token: %s\nQuantity: %d\nRequest Id: %s\n"
 		"Status: %s\nSignedRequest: %s\nError Code: %lld\nErrorMessage: %s\n",
 		paymentId,
@@ -224,10 +260,28 @@ void HelloWorld::onPurchaseIAPMsg(fbgPurchaseHandle payHandle) {
 	);
 }
 
-void HelloWorld::onPurchaseTrialware(fbgHasLicenseHandle hasLicenseHandle) {
+void HelloWorld::onHasLicenseMsg(sdkbox::HasLicenseHandle hasLicenseHandle) {
 	auto hasLicense = sdkbox::PluginGameroom::purchaseGetLicense(hasLicenseHandle);
 	::CCLOG(
-		"Has License: %llu",
+		"onHasLicenseMsg, Has License: %llu",
 		hasLicense
+	);
+}
+
+void HelloWorld::onAppRequestMsg(fbgAppRequestHandle appRequestHandle) {
+	char objectID[sdkbox::FBG_BUFFER_SIZE];
+	//auto size = sdkbox::PluginGameroom::appRequestGetRequestObjectID(appRequestHandle, objectID, sdkbox::FBG_BUFFER_SIZE);
+	auto size = fbg_AppRequest_GetRequestObjectId(appRequestHandle, objectID, sdkbox::FBG_BUFFER_SIZE);
+
+	::CCLOG("size = %lu\n", size);  // return 0 here, indicating that appRequestHandle is invalid.
+
+	char toUser[sdkbox::FBG_BUFFER_SIZE];
+	size = sdkbox::PluginGameroom::appRequestGetTo(appRequestHandle, toUser, sdkbox::FBG_BUFFER_SIZE);
+	::CCLOG("size = %lu\n", size);
+
+	::CCLOG(
+		"onAppRequestMsg, object id: %s, to user: %s",
+		objectID,
+		toUser
 	);
 }

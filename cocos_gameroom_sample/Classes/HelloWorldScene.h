@@ -16,10 +16,11 @@ public:
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
 
-    virtual void onLoginAccessTokenMsg(fbgAccessTokenHandle);
-    virtual void onFeedShareMsg(fbgFeedShareHandle);
-    virtual void onPurchaseIAPMsg(fbgPurchaseHandle);
-    virtual void onPurchaseTrialware(fbgHasLicenseHandle);
+	virtual void onLoginAccessTokenMsg(sdkbox::AccessTokenHandle);
+    virtual void onFeedShareMsg(sdkbox::FeedShareHandle);
+    virtual void onPurchaseIAPMsg(sdkbox::PurchaseHandle);
+    virtual void onHasLicenseMsg(sdkbox::HasLicenseHandle);
+	virtual void onAppRequestMsg(sdkbox::AppRequestHandle);
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);

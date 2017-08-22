@@ -15,10 +15,14 @@ namespace sdkbox {
     IMPORT_TYPE(AccessTokenHandle);
     IMPORT_TYPE(PurchaseHandle);
     IMPORT_TYPE(HasLicenseHandle);
+	IMPORT_TYPE(AppRequestHandle);
+	IMPORT_TYPE(FormDataHandle);
 
     IMPORT_TYPE(LoginScope);
 
     using FacebookID = fbid;
+
+	using FormData = std::map<std::string, std::string>;
 
     //using GameroomReq = fbgRequest;
 

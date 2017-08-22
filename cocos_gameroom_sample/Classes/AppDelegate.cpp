@@ -29,7 +29,8 @@ void AppDelegate::initGLContextAttrs()
 
 bool AppDelegate::applicationDidFinishLaunching() {
 #ifdef SDKBOX_ENABLED
-    sdkbox::PluginGameroom::init("523164037733626");
+    //sdkbox::PluginGameroom::init("523164037733626");
+	sdkbox::PluginGameroom::init("313416692430467");
 #endif
     // initialize director
     auto director = Director::getInstance();
