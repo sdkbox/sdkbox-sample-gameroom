@@ -33,7 +33,7 @@ var HelloWorldLayer = cc.Layer.extend({
 
 		var self = this;
 		var winsize = cc.winSize;
-		var coinsLabel = cc.Label.createWithSystemFont('Hello Js', 'Arial', 24);
+		var coinsLabel = cc.Label.createWithSystemFont('Hello Js', 'Arial', 20);
 		coinsLabel.setColor(cc.color(255, 0, 0, 128));
 		coinsLabel.setPosition(winsize.width / 2, 80);
 		self.addChild(coinsLabel);
@@ -102,12 +102,12 @@ var HelloWorldLayer = cc.Layer.extend({
 				cc.log('============');
 				cc.log('onAppRequestMsg');
 				self.showText('onAppRequestMsg');
-				cc.log('objectID = ' + handle.objectiD);
+				cc.log('objectID = ' + handle.objectID);
 				cc.log('to user: ' + handle.toUser);
 			}
 		});
 
-		cc.MenuItemFont.setFontSize(24);
+		cc.MenuItemFont.setFontSize(20);
 		var btnLogin = new cc.MenuItemFont('Gameroom Login', function () {
 			sdkbox.PluginGameroom.login();
 		}, this);
@@ -189,13 +189,21 @@ var HelloWorldLayer = cc.Layer.extend({
 			sdkbox.PluginGameroom.logAppEventWithValueToSum('test_event_2', { 'key3': 'val3', 'key4': 'val4' }, 10.24);
 		});
 
-		var btnAppRequest = new cc.MenuItemFont('Gameroom Send App Request', function () {
+		var btnAppRequestToFixedUsers = new cc.MenuItemFont('Gameroom Send App Request to Fixed Users', function () {
 			cc.log('==============');
-			cc.log('Gameroom Send App Request');
-			sdkbox.PluginGameroom.appRequest('hello', '', '', '1506344439429504', '', '', 1, '', '');
+			cc.log('Gameroom Send App Request to Fixed Users');
+			// please change the ids to your friends' id.
+			sdkbox.PluginGameroom.appRequest('hello, try this js demo.', '', '', '10154757370282483,1071096156356265,502296886783243', '', '', 20, '', 'hello');
 		});
 
-		var menu = new cc.Menu(btnLogin, btnLoginWithScopes, btnIsLoggedIn, btnFeedShare, btnIAP, btnIAPWithURL, btnPurchaseLicense, btnCheckLicense, btnActivateApp, btnAppEvent, btnAppRequest);
+		var btnAppRequest = new cc.MenuItemFont('Gameroom Send App Request with Choosing Users', function () {
+			cc.log('==============');
+			cc.log('Gameroom Send App Request with Choosing Users');
+			sdkbox.PluginGameroom.appRequest('hello, try this js demo.', '', '', '', '', '', 20, '', 'hello');
+		});
+
+		var menu = new cc.Menu(btnLogin, btnLoginWithScopes, btnIsLoggedIn, btnFeedShare, btnIAP,
+			btnIAPWithURL, btnPurchaseLicense, btnCheckLicense, btnActivateApp, btnAppEvent, btnAppRequestToFixedUsers, btnAppRequest);
 		menu.x = winsize.width / 2;
 		menu.y = winsize.height / 2;
 		menu.alignItemsVerticallyWithPadding(20);

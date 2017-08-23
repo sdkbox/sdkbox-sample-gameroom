@@ -151,20 +151,36 @@ void HelloWorld::createTestMenu() {
 		sdkbox::PluginGameroom::formDataDispose(formData);
 	}));
 
-	menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Gameroom Send App Request ", "sans", 24), [](Ref*) {
+	menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Gameroom Send App Request to fixed users ", "sans", 24), [](Ref*) {
 		CCLOG("Gameroom Send App Request");
 		sdkbox::PluginGameroom::appRequest(
-			"hello world",
+			"hello world, try this gameroom sdk demo.",
 			nullptr,
 			nullptr,
-			"1506344439429504",
+			"10154757370282483,1071096156356265,502296886783243",  // please change the ids to your friends' id.
+
 			nullptr,
 			nullptr,
-			1,
+			20,
 			nullptr,
 			"hello"
 		);
 	}));
+
+    menu->addChild(MenuItemLabel::create(Label::createWithSystemFont("Gameroom Send App Request with choosing target users", "sans", 24), [](Ref*) {
+        CCLOG("Gameroom Send App Request");
+        sdkbox::PluginGameroom::appRequest(
+            "hello world, try this gameroom sdk demo.",
+            nullptr,
+            nullptr,
+            nullptr,
+            nullptr,
+            nullptr,
+            20,
+            nullptr,
+            "hello"
+        );
+    }));
 
 	menu->alignItemsVerticallyWithPadding(10);
 	addChild(menu);
@@ -272,7 +288,7 @@ void HelloWorld::onAppRequestMsg(fbgAppRequestHandle appRequestHandle) {
 	char objectID[sdkbox::FBG_BUFFER_SIZE];
 	//auto size = sdkbox::PluginGameroom::appRequestGetRequestObjectID(appRequestHandle, objectID, sdkbox::FBG_BUFFER_SIZE);
 	auto size = fbg_AppRequest_GetRequestObjectId(appRequestHandle, objectID, sdkbox::FBG_BUFFER_SIZE);
-
+    ::CCLOG("onAppRequestMsg");
 	::CCLOG("size = %lu\n", size);  // return 0 here, indicating that appRequestHandle is invalid.
 
 	char toUser[sdkbox::FBG_BUFFER_SIZE];
@@ -280,7 +296,7 @@ void HelloWorld::onAppRequestMsg(fbgAppRequestHandle appRequestHandle) {
 	::CCLOG("size = %lu\n", size);
 
 	::CCLOG(
-		"onAppRequestMsg, object id: %s, to user: %s",
+		"object id: %s, to user: %s",
 		objectID,
 		toUser
 	);
