@@ -48,7 +48,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		GetWindowRect(parentWin, &rect);
 		::CCLOG("Parent Rect Size: %d, %d, %d, %d", rect.top, rect.left, rect.right, rect.bottom);
 		::CCLOG("parent window size: %d, %d", rect.right - rect.left, rect.bottom - rect.top);
-        glview = GLViewImpl::createWithRect("facebook", Rect(0, 0, rect.right-rect.left-20, rect.bottom-rect.top-100));
+        glview = GLViewImpl::createWithRect("facebook", Rect(0, 0, rect.right - rect.left - 20, rect.bottom - rect.top - 100), 1.0f, true);
         director->setOpenGLView(glview);
 		auto currentWin = Director::getInstance()->getOpenGLView()->getWin32Window();
 		::CCLOG("current HWND: %x", currentWin);

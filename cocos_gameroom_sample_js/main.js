@@ -76,7 +76,7 @@ cc.game.onStart = function(){
 	// Setup the resolution policy and design resolution size
 	//
 	// WORKAROUND: In Facebook Gameroom, this setting can't be reconciled with window scaling.
-    //cc.view.setDesignResolutionSize(1024, 768, cc.ResolutionPolicy.SHOW_ALL);
+    cc.view.setDesignResolutionSize(1024, 768, cc.ResolutionPolicy.SHOW_ALL);
 
     // The game will be resized when browser size change
     cc.view.resizeWithBrowserSize(true);

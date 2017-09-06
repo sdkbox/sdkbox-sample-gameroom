@@ -58,8 +58,10 @@ using namespace cocos2d::experimental;
 using namespace CocosDenshion;
 #endif
 
+#ifdef SDKBOX_ENABLED
 #include "PluginGameroomJS.hpp"
 #include "PluginGameroomJSHelper.h"
+#endif
 
 
 USING_NS_CC;
@@ -108,7 +110,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 		GetWindowRect(parentWin, &rect);
 		::CCLOG("Parent Rect Size: %d, %d, %d, %d", rect.top, rect.left, rect.right, rect.bottom);
 		::CCLOG("parent window size: %d, %d", rect.right - rect.left, rect.bottom - rect.top);
-		glview = GLViewImpl::createWithRect("cocos_gameroom_sample_js", Rect(0, 0, rect.right - rect.left - 20, rect.bottom - rect.top - 100));
+		glview = GLViewImpl::createWithRect("cocos_gameroom_sample_js", Rect(0, 0, rect.right - rect.left - 20, rect.bottom - rect.top - 100), 1.0f, true);
 
 		// Maybe SDKBOX js-binding has some pointers that are not released, 
 		// so the assertion "_CrtIsValidHeapPointer" will be failed when current window is closed as child window.
@@ -118,13 +120,13 @@ bool AppDelegate::applicationDidFinishLaunching()
 		// 
 		// A WORKAROUND is that don't use "SetParent" to build the affiliation with "Facebook Gameroom Client" window.
 		//
-		//director->setOpenGLView(glview);
-		//auto currentWin = Director::getInstance()->getOpenGLView()->getWin32Window();
-		//::CCLOG("current HWND: %x", currentWin);
-		//SetParent(currentWin, parentWin);
+		director->setOpenGLView(glview);
+		auto currentWin = Director::getInstance()->getOpenGLView()->getWin32Window();
+		::CCLOG("current HWND: %x", currentWin);
+		SetParent(currentWin, parentWin);
 
 #endif
-        director->setOpenGLView(glview);
+        //director->setOpenGLView(glview);
 }
 
     // set FPS. the default value is 1.0/60 if you don't call this
@@ -177,8 +179,10 @@ bool AppDelegate::applicationDidFinishLaunching()
     sc->addRegisterCallback(register_all_cocos2dx_3d_extension);
 
 	// register SDKBOX Plugin
+#ifdef SDKBOX_ENABLED
 	sc->addRegisterCallback(register_all_PluginGameroomJS);
 	sc->addRegisterCallback(register_all_PluginGameroomJS_helper);
+#endif 
 
 #if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
     // Physics 3d can be commented out to reduce the package

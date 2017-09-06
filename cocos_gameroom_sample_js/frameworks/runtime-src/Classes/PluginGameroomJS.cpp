@@ -1,7 +1,7 @@
 #include "PluginGameroomJS.hpp"
 #include "PluginGameroom/PluginGameroom.h"
 #include "SDKBoxJSHelper.h"
-#include "sdkbox/Sdkbox.h"
+//#include "sdkbox/Sdkbox.h"
 
 
 #if defined(MOZJS_MAJOR_VERSION)
