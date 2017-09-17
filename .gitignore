@@ -274,5 +274,6 @@ __pycache__/
 # Cake - Uncomment if you are using it
 # tools/
 Debug.win32/
+Release.win32/
 cocos2d/
 cocos2d-x/

@@ -16,7 +16,7 @@ namespace sdkbox {
 
     class  GameroomListener {
     public:
-		GameroomListener() {}
+        GameroomListener() {}
         virtual ~GameroomListener() {}
 
     public:
@@ -25,7 +25,7 @@ namespace sdkbox {
         virtual void onFeedShareMsg(FeedShareHandle obj) = 0;
         virtual void onPurchaseIAPMsg(PurchaseHandle obj) = 0;
         virtual void onHasLicenseMsg(HasLicenseHandle obj) = 0;
-		virtual void onAppRequestMsg(AppRequestHandle obj) = 0;
+        virtual void onAppRequestMsg(AppRequestHandle obj) = 0;
     };
 
 
@@ -41,7 +41,7 @@ namespace sdkbox {
     public:
         // methods from Facebook Gameroom SDK.
 
-        // Login, Access Token 
+        // Login, Access Token
         static bool accessTokenIsValid(AccessTokenHandle obj);
         static FacebookID accessTokenGetUserID(AccessTokenHandle obj);
         static size_t accessTokenGetTokenString(AccessTokenHandle obj, char* buffer, size_t bufferLen);
@@ -51,9 +51,9 @@ namespace sdkbox {
 
         static bool isLoggedIn();
 
-		// convert GameroomReq to std::string(sic passim)
+        // convert GameroomReq to std::string(sic passim)
         static /*GameroomReq*/ std::string login();
-		static /*GameroomReq*/ std::string loginWithScopes(uint32_t scopeCount, const std::vector<std::string>& loginScopes);
+        static /*GameroomReq*/ std::string loginWithScopes(uint32_t scopeCount, const std::vector<std::string>& loginScopes);
 
         // Feed Share
         static FacebookID feedShareGetPostID(FeedShareHandle obj);
@@ -83,7 +83,7 @@ namespace sdkbox {
         static size_t purchaseGetErrorMessage(PurchaseHandle obj, char* buffer, size_t bufferLen);
         static FacebookID purchaseGetLicense(HasLicenseHandle obj);
 
-		static /*GameroomReq*/ std::string purchaseIAP(
+        static /*GameroomReq*/ std::string purchaseIAP(
             const char* product,
             uint32_t quantity,
             uint32_t quantityMin,
@@ -104,45 +104,45 @@ namespace sdkbox {
         static /*GameroomReq*/ std::string payPremium();
         static /*GameroomReq*/ std::string hasLicense();
 
-		// App Events for Facebook Analytics
-		static /*GameroomReq*/ std::string logAppEvent(const char* eventName, const FormDataHandle formData);
-		static /*GameroomReq*/ std::string logAppEventWithValueToSum(const char* eventName, const FormDataHandle formData, float valueToSum);
-		static /*GameroomReq*/ std::string activateApp();
+        // App Events for Facebook Analytics
+        static /*GameroomReq*/ std::string logAppEvent(const char* eventName, const FormDataHandle formData);
+        static /*GameroomReq*/ std::string logAppEventWithValueToSum(const char* eventName, const FormDataHandle formData, float valueToSum);
+        static /*GameroomReq*/ std::string activateApp();
 
-		// Form Data for App Events
-		static const FormDataHandle formDataCreateNew();
-		static void formDataSet(
-			const FormDataHandle obj,
-			char *fieldNameBuffer,
-			size_t fieldNameBufferLen,
-			char *valueBuffer,
-			size_t valueBufferLen
-		);
-		static size_t formDataGet(
-			const FormDataHandle obj,
-			char *fieldNameBuffer,
-			size_t fieldNameBufferLen,
-			char *valueBuffer,
-			size_t valueBufferLen
-		);
-		static void formDataDelete(const FormDataHandle obj, char *fieldNameBuffer, size_t fieldNameBufferLen);
-		static bool formDataHas(const FormDataHandle obj, char* fieldNameBuffer, size_t fieldNameBufferLen);
-		static void formDataDispose(const FormDataHandle obj);
+        // Form Data for App Events
+        static const FormDataHandle formDataCreateNew();
+        static void formDataSet(
+            const FormDataHandle obj,
+            char *fieldNameBuffer,
+            size_t fieldNameBufferLen,
+            char *valueBuffer,
+            size_t valueBufferLen
+        );
+        static size_t formDataGet(
+            const FormDataHandle obj,
+            char *fieldNameBuffer,
+            size_t fieldNameBufferLen,
+            char *valueBuffer,
+            size_t valueBufferLen
+        );
+        static void formDataDelete(const FormDataHandle obj, char *fieldNameBuffer, size_t fieldNameBufferLen);
+        static bool formDataHas(const FormDataHandle obj, char* fieldNameBuffer, size_t fieldNameBufferLen);
+        static void formDataDispose(const FormDataHandle obj);
 
-		// App Request
-		static /*GameroomReq*/ std::string appRequest(
-			const char* message, 
-			const char* actionType, 
-			const char* objectID, 
-			const char* to, 
-			const char* filters, 
-			const char* excludeIDs, 
-			uint32_t maxRecipients, 
-			const char* data, 
-			const char* title
-		);
-		static size_t appRequestGetRequestObjectID(const AppRequestHandle obj, char *buffer, size_t bufferLen);
-		static size_t appRequestGetTo(const AppRequestHandle obj, char *buffer, size_t bufferLen);
+        // App Request
+        static /*GameroomReq*/ std::string appRequest(
+            const char* message,
+            const char* actionType,
+            const char* objectID,
+            const char* to,
+            const char* filters,
+            const char* excludeIDs,
+            uint32_t maxRecipients,
+            const char* data,
+            const char* title
+        );
+        static size_t appRequestGetRequestObjectID(const AppRequestHandle obj, char *buffer, size_t bufferLen);
+        static size_t appRequestGetTo(const AppRequestHandle obj, char *buffer, size_t bufferLen);
     };
 }
 #endif
